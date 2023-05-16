@@ -1,0 +1,36 @@
+{
+   "name": "ctf-task1-backend",
+   "version": "1.0.0",
+   "description": "This is just a backend task for ctf sd recruitment",
+   "main": "index.js",
+   "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "NODE_ENV=production node index.js",
+      "dev": "cross-env NODE_ENV=development nodemon index.js",
+      "staging": "cross-env NODE_ENV=staging nodemon index.js",
+      "db-pull": "dotenv -e .env.development -- npx prisma db pull ",
+      "db-push": "dotenv -e .env.development -- npx prisma db push ",
+      "db-pull:staging": "dotenv -e .env.staging -- npx prisma db pull ",
+      "db-push:staging": "dotenv -e .env.staging -- npx prisma db push ",
+      "db-studio": "dotenv -e .env.development -- npx prisma studio",
+      "db-studio:staging": "dotenv -e .env.staging -- npx prisma studio"
+   },
+   "author": "Velmurugan Jeyakumar",
+   "license": "ISC",
+   "dependencies": {
+      "@prisma/client": "^4.14.0",
+      "bcryptjs": "^2.4.3",
+      "cors": "^2.8.5",
+      "dotenv-flow": "^3.2.0",
+      "express": "^4.18.2",
+      "jsonwebtoken": "^9.0.0",
+      "morgan": "^1.10.0",
+      "nodemailer": "^6.9.2",
+      "otp-generator": "^4.0.1"
+   },
+   "devDependencies": {
+      "cross-env": "^7.0.3",
+      "dotenv-cli": "^7.2.1",
+      "nodemon": "^2.0.22"
+   }
+}
