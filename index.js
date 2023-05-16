@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
    res.send('<h1> CTF Backend Task - Techops Student Director Recruitment  </h1>');
 });
 
-const port = process.env.port || 5000;
+const port = process.env.PORT || 5000;
 
 app.listen(port, async () => {
    console.log(`✅ Server listening on port ${port}`);
