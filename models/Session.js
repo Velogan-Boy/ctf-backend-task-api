@@ -47,27 +47,9 @@ const removeSession = async (token) => {
    }
 };
 
-const getUserIdByToken = async (token) => {
-   try {
-      result = await prisma.sessions.findUnique({
-         where: { user_token: token },
-         select: { user_id: true },
-      });
-
-      if (!result) {
-         return { userID: 0, err: 'No user found!' };
-      }
-
-      return { userID: result.user_id, err: null };
-   } catch (err) {
-      return { userID: 0, err };
-   }
-};
-
 module.exports = {
    checkSession,
    createNewSession,
    expireSession,
    removeSession,
-   getUserIdByToken
 };

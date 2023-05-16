@@ -1,11 +1,10 @@
+const User = require('./User');
+
 const prisma = require('../prisma/prisma');
-const otpGenerator = require('otp-generator');
 
 const generateOTP = () => {
-   return {
-      otp: otpGenerator.generate(6, { upperCaseAlphabets: true, specialChars: false }),
-      err: null,
-   };
+   // 6 digit OTP
+   return { otp: Math.floor(100000 + Math.random() * 900000), err: null };
 };
 
 const insertOTPInDB = async ({ email, userID, otp }) => {
@@ -24,21 +23,23 @@ const verifyOTP = async (userID, email, otp) => {
       const result = await prisma.$queryRaw`SELECT otp from user_otp WHERE email=${email} AND user_id=${userID} AND expiry_time > now()`;
 
       if (!result || result.length == 0) {
-         return { verified: false, message: 'Please try again', err: 'OTP is expired', error_type: 2 };
+         return { verified: false, message: 'Please try again', err: 'OTP is expired' };
       }
 
       if (otp != result[0].otp) {
-         return { verified: false, message: "OTP doesn't match. Please try again.", err: null, error_type: 3 };
+         return { verified: false, message: "OTP doesn't match. Please try again.", err: null };
       }
 
-      let verifyErr = await markEmailAsVerified(email);
+      // if email is not verified, mark it as verified
+      let verifyErr = await User.markEmailAsVerified(email);
+
       if (verifyErr) {
-         return { verified: false, message: 'Internal Server Error', err: verifyErr, error_type: 1 };
+         return { verified: false, message: 'Internal Server Error', err: verifyErr };
       }
 
-      return { verified: true, message: 'Email verification Successful', err: null, error_type: 0 };
+      return { verified: true, message: 'Verification Successful', err: null };
    } catch (err) {
-      return { verified: false, message: 'Internal Server Error', err, error_type: 1 };
+      return { verified: false, message: err };
    }
 };
 

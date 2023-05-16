@@ -19,14 +19,23 @@ const sendOTP = (email, otp) => {
          from: 'CTF - Velmurugan J',
          to: email,
          subject: 'OTP verification for the app made by Velmurugan Jeyakumar',
-         html: `<p>Hello, <br/> Please use the verification code below in order to complete registration process.<br/></p>
-                    <center>
-                        <p style="font-size: 20px; color: blue;">
-                            <b>${otp}</b>
-                        </p>
-                    </center>
-                    <br/> <p>Validity of this code is <b>5 minutes</b>.</p><br/><br/>
-                    <p>Thanks,<br/> - Velogan_boy</p>`,
+         html: `<div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
+  <div style="margin:50px auto;width:70%;padding:20px 0">
+    <div style="border-bottom:1px solid #eee">
+      <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">CTF TechOps Backend Task</a>
+    </div>
+    <p style="font-size:1.1em">Hello there,</p>
+    <p> Please use the verification code below in order to continue.</p>
+    <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">${otp}</h2>
+    <p style="font-size:0.9em;">Regards,<br />Velmurugan Jeyakumar</p>
+    <hr style="border:none;border-top:1px solid #eee" />
+    <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
+      <p>TechOps Domain</p>
+      <p>CEG Tech Forum</p>
+      <p>College of Engineering, Guindy</p>
+    </div>
+  </div>
+</div>`,
       };
       Transport.sendMail(mailOptions, (err) => {
          if (err) {
