@@ -1,6 +1,6 @@
 const Session = require('../models/Session');
 
-const { verifyJWT } = require('../services/jwtauth');
+const { verifyJWT } = require('../services/jwtAuth');
 
 const tokenAuth = async (req, res, next) => {
    let token = req.headers['tokenstring'];
