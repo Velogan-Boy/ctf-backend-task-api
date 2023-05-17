@@ -165,7 +165,7 @@ const regenerateOtpHandler = async (req, res) => {
 };
 
 const resetPasswordHandler = async (req, res) => {
-   let { otp, email, password, userid } = req.body;
+   let { otp, email, password } = req.body;
 
    if (!otp) {
       return res.status(400).json({ message: 'Missing OTP' });
@@ -175,7 +175,7 @@ const resetPasswordHandler = async (req, res) => {
       return res.status(400).json({ message: 'Missing Password' });
    }
 
-   if (!email || !userid) {
+   if (!email) {
       return res.status(400).json({ message: 'Missing Credentials' });
    }
 
@@ -190,7 +190,13 @@ const resetPasswordHandler = async (req, res) => {
 
    password = hashPassword(password);
 
-   let { err: updateErr } = await User.updatePassword(userid, password);
+   const { user, err: userErr } = await User.getUser(email);
+
+   if (userErr) {
+      return res.status(500).json({ message: 'Internal Server Error', error: userErr.message });
+   }
+
+   let { err: updateErr } = await User.updatePassword(user.id, password);
 
    if (updateErr) {
       return res.status(500).json({ message: 'Internal Server Error', error: updateErr.message, error_type: 1 });
