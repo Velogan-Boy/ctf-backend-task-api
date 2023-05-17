@@ -69,6 +69,10 @@ const verifyOTPHandler = async (req, res) => {
       return res.status(400).json({ message: 'Missing Credentials' });
    }
 
+   if (!userid) {
+      return res.status(400).json({ message: 'Missing User ID' });
+   }
+
    let { verified, message, err: otperr } = await UserOTP.verifyOTP(email, otp);
 
    if (otperr || !verified) {
