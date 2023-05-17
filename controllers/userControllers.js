@@ -6,6 +6,20 @@ const services = require('../services/email');
 const { createJWT } = require('../services/jwtAuth');
 const { hashPassword, verifyPassword } = require('../utils/hashPassword');
 
+const getUserHandler = async (req, res) => {
+   const { user, err } = await Session.getUserBySession(req.headers['tokenstring']);
+
+   if (err) {
+      return res.status(500).json({ message: 'Internal Server Error', error: err.message });
+   }
+
+   if (!user) {
+      return res.status(400).json({ message: 'Invalid Session' });
+   }
+
+   return res.status(200).json({ message: 'User found', user });
+};
+
 // Authentication 1st Step -> returns user_id
 const authenticate = async (req, res) => {
    let { email, password } = req.body;
@@ -49,13 +63,13 @@ const authenticate = async (req, res) => {
 };
 
 const verifyOTPHandler = async (req, res) => {
-   let { userid, email, otp } = req.body;
+   let { email, otp, userid } = req.body;
 
-   if (!userid || !email || !otp) {
+   if (!email || !otp) {
       return res.status(400).json({ message: 'Missing Credentials' });
    }
 
-   let { verified, message, err: otperr } = await UserOTP.verifyOTP(userid, email, otp);
+   let { verified, message, err: otperr } = await UserOTP.verifyOTP(email, otp);
 
    if (otperr || !verified) {
       return res.status(400).json({
@@ -161,7 +175,7 @@ const resetPasswordHandler = async (req, res) => {
       return res.status(400).json({ message: 'Missing Credentials' });
    }
 
-   let { verified, message, err: otperr } = await UserOTP.verifyOTP(userid, email, otp);
+   let { verified, message, err: otperr } = await UserOTP.verifyOTP(email, otp);
 
    if (otperr || !verified) {
       return res.status(400).json({
@@ -198,6 +212,7 @@ const logout = async (req, res) => {
 };
 
 module.exports = {
+   getUserHandler,
    registerUser,
    verifyOTPHandler,
    regenerateOtpHandler,

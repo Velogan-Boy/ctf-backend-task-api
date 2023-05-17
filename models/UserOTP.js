@@ -18,9 +18,9 @@ const insertOTPInDB = async ({ email, userID, otp }) => {
    return null;
 };
 
-const verifyOTP = async (userID, email, otp) => {
+const verifyOTP = async ( email, otp) => {
    try {
-      const result = await prisma.$queryRaw`SELECT otp from user_otp WHERE email=${email} AND user_id=${userID} AND expiry_time > now()`;
+      const result = await prisma.$queryRaw`SELECT otp from user_otp WHERE email=${email} AND expiry_time > now()`;
 
       if (!result || result.length == 0) {
          return { verified: false, message: 'Please try again', err: 'OTP is expired' };

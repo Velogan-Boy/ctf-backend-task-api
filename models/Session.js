@@ -47,9 +47,30 @@ const removeSession = async (token) => {
    }
 };
 
+const getUserBySession = async (token) => {
+   try {
+      const user = await prisma.sessions.findUnique({
+         where: { user_token: token },
+         select: {
+            users: {
+               select: {
+                  id: true,
+                  email: true,
+               },
+            },
+         },
+      });
+
+      return { user: user.users, err: null };
+   } catch (err) {
+      return { user: null, err };
+   }
+};
+
 module.exports = {
    checkSession,
    createNewSession,
    expireSession,
    removeSession,
+   getUserBySession,
 };

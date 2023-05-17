@@ -2,11 +2,12 @@ const express = require('express');
 
 const router = express.Router();
 
-const { registerUser, verifyOTPHandler, regenerateOtpHandler, resetPasswordHandler, authenticate, logout } = require('../../controllers/userControllers');
+const { registerUser, verifyOTPHandler, regenerateOtpHandler, resetPasswordHandler, authenticate, logout, getUserHandler } = require('../../controllers/userControllers');
 
 const tokenAuth = require('../../middlewares/tokenAuth');
 
 router
+   .get('/', tokenAuth, getUserHandler)
    .post('/register', registerUser)
    .post('/authenticate', authenticate)
    .post('/verify', verifyOTPHandler)
